@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Tasks</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f6f9;
+            color: #333;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .add-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            background: #fafafa;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-left: 5px solid #007bff;
+            border-radius: 8px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 12px;
+            border-radius: 12px;
+        }
+
+        .status.done {
+            background: #28a745;
+            color: white;
+        }
+
+        .status.pending {
+            background: #ffc107;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            color: white;
+            margin-left: 5px;
+        }
+
+        .edit {
+            background: #17a2b8;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+
+        .empty {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Tasks</h1>
+        <a href="{% url 'task_add' %}" class="add-button">+ Add Task</a>
+
+        {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-item">
+                    <div>
+                        <h3 class="{% if task.completed %}completed{% endif %}">{{ task.title }}</h3>
+                        <span class="status {% if task.completed %}done{% else %}pending{% endif %}">
+                            {% if task.completed %}Completed{% else %}Pending{% endif %}
+                        </span>
+                    </div>
+                    <div>
+                        <a href="{% url 'task_edit' task.pk %}" class="btn edit">Edit</a>
+                        <a href="{% url 'task_delete' task.pk %}" class="btn delete">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p class="empty">No tasks found.</p>
+        {% endif %}
+    </div>
+<p style="text-align:right;">
+    Hello, {{ request.user.username }} |
+    <a href="{% url 'logout' %}">Logout</a>
+</p>
+
+
+
+</body>
+</html>
